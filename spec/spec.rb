@@ -11,13 +11,18 @@ describe "things" do
   before do
     Capybara.app = Rack::Builder.new do
       use RequestVisualizer do |string|
-        Service.lookup_service(string.to_s)
+        Lookup.lookup(string.to_s)
       end
-      run SandwhichMaker
+      Lookup.services.each do |url, service|
+        map url do
+          run service
+        end
+      end
     end
+    page.driver.header 'User-Agent', "Capybara"
   end
 
-  it "does stuff" do
+  it "makes a sandwhich" do
     visit SandwhichMaker::BASE_URL
   end
 

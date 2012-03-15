@@ -5,15 +5,15 @@ class RequestVisualizer
     @lookup = lookup
   end
 
-  def self.parse(string)
-    (@lookup && @lookup.call(string.to_s) || string.to_s).black_on_cyan
+  def parse(string)
+    ((@lookup && @lookup.call(string.to_s)) || string.to_s).black_on_cyan
   end
 
-  def self.indent
+  def indent
     " "*@@indent
   end
 
-  def self.log_request(request)
+  def log_request(request)
     from = parse(request.user_agent.to_s)
     to = parse(request.url.to_s)
     puts "#{self.indent}#{from} -> #{request.request_method.upcase.bold} (#{request.url.underline}) -> #{to}"
@@ -30,7 +30,7 @@ class RequestVisualizer
     [from, to]
   end
 
-  def self.log_response(from, to, headers, body, status)
+  def log_response(from, to, headers, body, status)
     location = headers["Location"]
     if location
       puts "#{self.indent}#{from} <--#{status}-- #{location.underline} <- #{to}"
@@ -54,9 +54,9 @@ class RequestVisualizer
   def call(env)
     @@indent ||= 0
     @@indent += 5
-    from, to = RequestVisualizer.log_request(Rack::Request.new(env))
+    from, to = log_request(Rack::Request.new(env))
     status, headers, body = @app.call(env)
-    RequestVisualizer.log_response(from, to, headers, body, status)
+    log_response(from, to, headers, body, status)
     @@indent -= 5
     [status, headers, body]
   end
