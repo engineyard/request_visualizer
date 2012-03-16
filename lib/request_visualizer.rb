@@ -6,7 +6,14 @@ class RequestVisualizer
   end
 
   def parse(string)
-    ((@lookup && @lookup.call(string.to_s)) || string.to_s).black_on_cyan
+    colorize((@lookup && @lookup.call(string.to_s)) || string.to_s)
+  end
+
+  def colorize(string)
+    @@colors ||= [:black_on_cyan, :black_on_magenta, :black_on_yellow, :black_on_green]
+    @@colorized_before ||= {}
+    @@colorized_before[string] ||= string.send(@@colors.pop || :black_on_white)
+    @@colorized_before[string]
   end
 
   def indent

@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
-#TODO: move this to gemspec:
-gem 'colored'
+gemspec
 
 group :test do
   gem 'ey_api_hmac', '>= 0.4.0'
