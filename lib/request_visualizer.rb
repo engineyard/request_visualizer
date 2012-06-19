@@ -26,10 +26,14 @@ class RequestVisualizer
     puts "#{self.indent}#{from} -> #{request.request_method.upcase.bold} (#{request.url.underline}) -> #{to}"
     request.body.rewind
     req_body = request.body.read
+    indent_prefix = self.indent
     begin
-      json = JSON.parse(req_body)
-      indent_prefix = self.indent
-      puts indent_prefix + json.pretty_inspect.gsub("\n","\n#{indent_prefix}")
+      if request.env["CONTENT_TYPE"].to_s.include?("form-urlencoded")
+        puts indent_prefix + CGI.parse(req_body).pretty_inspect.gsub("\n","\n#{indent_prefix}")
+      else
+        json = JSON.parse(req_body)
+        puts indent_prefix + json.pretty_inspect.gsub("\n","\n#{indent_prefix}")
+      end
     rescue => e
       # puts "WARN: JSON request with non-json body! (#{req_body})"
     end
