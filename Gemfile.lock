@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    request_visualizer (0.0.1)
+    request_visualizer (0.0.2)
       colored
 
 GEM

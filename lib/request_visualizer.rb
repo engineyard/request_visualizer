@@ -10,7 +10,7 @@ class RequestVisualizer
   end
 
   def colorize(string)
-    @@colors ||= [:black_on_cyan, :black_on_magenta, :black_on_yellow, :black_on_green]
+    @@colors ||= [:white_on_black, :white_on_red, :white_on_blue, :black_on_cyan, :black_on_magenta, :black_on_yellow, :black_on_green]
     @@colorized_before ||= {}
     @@colorized_before[string] ||= string.send(@@colors.pop || :black_on_white)
     @@colorized_before[string]
