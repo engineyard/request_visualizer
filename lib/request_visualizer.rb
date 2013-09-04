@@ -6,7 +6,7 @@ class RequestVisualizer
   end
 
   def parse(string)
-    colorize((@lookup && @lookup.call(string.to_s)) || string.to_s)
+    colorize((@lookup && @lookup.call(string.to_s)) || smart_lookup(string.to_s))
   end
 
   def colorize(string)
@@ -71,4 +71,15 @@ class RequestVisualizer
     @@indent -= 5
     [status, headers, body]
   end
+
+  private
+
+  def smart_lookup(str)
+    str.gsub!("http://","")
+    str.gsub!("https://","")
+    str.split("/")[0] || str
+  rescue => e
+    return str
+  end
+
 end
